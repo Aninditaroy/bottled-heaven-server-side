@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 const app = express();
 
@@ -22,6 +22,14 @@ async function run(){
         const cursor = perfumeCollection.find(query);
         const perfumes = await cursor.toArray();
         res.send(perfumes);
+    })
+
+    //  find one perfume with id api
+    app.get('/perfumes/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = {_id:ObjectId(id)};
+        const perfume = await perfumeCollection.findOne(query);
+        res.send(perfume);
     })
 }
 run().catch(console.dir);
