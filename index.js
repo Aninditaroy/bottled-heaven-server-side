@@ -15,6 +15,14 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
     await client.connect();
     const perfumeCollection = client.db("bottledHeaven").collection("perfumes");
+
+    // get perfumes api
+    app.get('/perfumes',async(req,res)=>{
+        const query = {};
+        const cursor = perfumeCollection.find(query);
+        const perfumes = await cursor.toArray();
+        res.send(perfumes);
+    })
 }
 run().catch(console.dir);
 app.get('/',(req,res)=>{
