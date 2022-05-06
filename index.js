@@ -20,7 +20,7 @@ function verifyJWT(req, res, next) {
     if (err) {
       return res.status(403).send({ message: 'Forbidden access' });
     }
-    console.log('decoded',decoded);
+    console.log('decoded', decoded);
     req.decoded = decoded;
     next();
   })
@@ -57,6 +57,21 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const perfume = await perfumeCollection.findOne(query);
       res.send(perfume);
+    })
+
+    //  update quantity
+    app.put('/perfumes/:id', async (req, res) => {
+      const id = req.params.id;
+      const updatedInventory = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updatedDoc = {
+        $set: {
+          quantity: updatedInventory.quantity
+        }
+      };
+      const result = await perfumeCollection.updateOne(filter, updatedDoc, options);
+      res.send(result);
     })
 
     // post new perfume in inventories 
