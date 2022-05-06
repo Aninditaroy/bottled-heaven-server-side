@@ -45,7 +45,7 @@ async function run() {
 
     // get perfumes inventories api
     app.get('/perfumes', async (req, res) => {
-      const query = {};
+      const query = req.query;
       const cursor = perfumeCollection.find(query);
       const perfumes = await cursor.toArray();
       res.send(perfumes);
